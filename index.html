@@ -13,13 +13,14 @@
 </div>
 <script>
     (function(){
+        autoCount= 0;
         video = document.querySelector("#touchrange")
         console.log(video.getBoundingClientRect().width);
         seekflg=0
         time=0
         video_width = video.getBoundingClientRect().width;
         duration = 100 //100fps
-
+        dragging = false; //ドラッグなう
         video.addEventListener("dragstart", function(ev) {
             // Call the drag and drop data processor
             console.log("dragstart :", ev)
@@ -27,8 +28,11 @@
             img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII=";
             ev.dataTransfer.setDragImage(img, 0, 0);
         }, false);
-
+        video.addEventListener("dragend", function(ev) {
+            dragging = false;
+        }, false);
         video.addEventListener("drag", function(ev) {
+            dragging = true;
             // Call the drag and drop data processor
 
             x = ev.clientX;
@@ -44,6 +48,7 @@
             if(target_time == time) {console.log("same");return;}
             time = target_time
             changeImage(time)
+            autoCount = time
             console.log("target:", time)
 
         }, false);
@@ -66,6 +71,16 @@
 
             img.onload = function() {
                 ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
+                setInterval(function(){
+                        if(dragging){
+                            return
+                        }
+                        if(autoCount >= 100){
+                            autoCount = 0;
+                        }
+                        changeImage(autoCount)　//idをclearIntervalで指定している
+                        autoCount ++;
+                    }, 50);
             }
             ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
         }
