@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" >
     <title>Title</title>
 </head>
 <body>
@@ -31,7 +32,31 @@
         video.addEventListener("dragend", function(ev) {
             dragging = false;
         }, false);
+        video.addEventListener("touchend", function(ev) {
+            dragging = false;
+        }, false);
         video.addEventListener("drag", function(ev) {
+            dragging = true;
+            // Call the drag and drop data processor
+
+            x = ev.clientX;
+            console.log(x)
+            //ダメパターン
+            if(1 > x || video_width < x){ console.log("dame");return};
+            //console.log("dragging : ", ev.clientX)
+            width_radio = x / video_width
+            console.log("width_radio",width_radio)
+            _time = duration * (width_radio)
+            console.log("_time:", _time)
+            target_time = Math.floor(_time)
+            if(target_time == time) {console.log("same");return;}
+            time = target_time
+            changeImage(time)
+            autoCount = time
+            console.log("target:", time)
+
+        }, false);
+        video.addEventListener("touchmove", function(ev) {
             dragging = true;
             // Call the drag and drop data processor
 
