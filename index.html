@@ -60,8 +60,8 @@
             dragging = true;
             // Call the drag and drop data processor
 
-            x = ev.clientX;
-            console.log(x)
+            x = ev.changedTouches[0].clientX;
+            console.log(ev.changedTouches)
             //ダメパターン
             if(1 > x || video_width < x){ console.log("dame");return};
             //console.log("dragging : ", ev.clientX)
