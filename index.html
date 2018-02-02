@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="touchrange" draggable="true" style="width:320px;height:160px">
+    <canvas id="c1">
+
+    </canvas>
+</div>
+<script>
+    (function(){
+        video = document.querySelector("#touchrange")
+        console.log(video.getBoundingClientRect().width);
+        seekflg=0
+        time=0
+        video_width = video.getBoundingClientRect().width;
+        duration = 100 //100fps
+
+        video.addEventListener("dragstart", function(ev) {
+            // Call the drag and drop data processor
+            console.log("dragstart :", ev)
+            var img = document.createElement("img");
+            img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII=";
+            ev.dataTransfer.setDragImage(img, 0, 0);
+        }, false);
+
+        video.addEventListener("drag", function(ev) {
+            // Call the drag and drop data processor
+
+            x = ev.clientX;
+            console.log(x)
+            //ダメパターン
+            if(1 > x || video_width < x){ console.log("dame");return};
+            //console.log("dragging : ", ev.clientX)
+            width_radio = x / video_width
+            console.log("width_radio",width_radio)
+            _time = duration * (width_radio)
+            console.log("_time:", _time)
+            target_time = Math.floor(_time)
+            if(target_time == time) {console.log("same");return;}
+            time = target_time
+            changeImage(time)
+            console.log("target:", time)
+
+        }, false);
+
+        var canvas = document.getElementById('c1');
+        if ( ! canvas || ! canvas.getContext ) { console.log("a?");return false; }
+        var ctx = canvas.getContext('2d');
+        /* Imageオブジェクトを生成 */
+        var img = new Image();
+        img.src = "https://dotup.org/uploda/dotup.org1453944.png";
+        changeImage(0);
+        /* 画像が読み込まれるのを待ってから処理を続行 */
+        canvas.appendChild(img)
+        function changeImage(t){
+            var nextXSlot = (t+1) % 10;
+            var nextYSlot = Math.floor((t+1)/10);
+            var nextFrameOffsetX = nextXSlot * 320;
+            var nextFrameOffsetY = nextYSlot * 180;
+            console.log ("SLOT FOR THIS FRAME IS: " + nextXSlot + " " + nextYSlot);
+
+            img.onload = function() {
+                ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
+            }
+            ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
+        }
+    })();
+
+
+
+</script>
+</body>
+</html>
