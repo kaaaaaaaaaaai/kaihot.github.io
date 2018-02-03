@@ -26,46 +26,46 @@
                 </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
-                <canvas class="canvas" data-src="./img07.png">
-                </canvas>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
-                <canvas class="canvas" data-src="./img02.png">
-                </canvas>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
-                <canvas class="canvas" data-src="./img03.png">
-                </canvas>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
-                <canvas class="canvas" data-src="./img06.png">
-                </canvas>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
-                <canvas class="canvas" data-src="./img08.png">
-                </canvas>
-            </div>
-        </div>
-    </div>
+    <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+            <!--<div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">-->
+                <!--<canvas class="canvas" data-src="./img07.png">-->
+                <!--</canvas>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+            <!--<div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">-->
+                <!--<canvas class="canvas" data-src="./img02.png">-->
+                <!--</canvas>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+            <!--<div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">-->
+                <!--<canvas class="canvas" data-src="./img03.png">-->
+                <!--</canvas>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+            <!--<div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">-->
+                <!--<canvas class="canvas" data-src="./img06.png">-->
+                <!--</canvas>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="row">-->
+        <!--<div class="col-md-12">-->
+            <!--<div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">-->
+                <!--<canvas class="canvas" data-src="./img08.png">-->
+                <!--</canvas>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
 
 </div>
 
@@ -75,7 +75,6 @@
 <script>
     var isSP = function(){
         if ((navigator.userAgent.indexOf('iPhone') > 0 && navigator.userAgent.indexOf('iPad') == -1) || navigator.userAgent.indexOf('iPod') > 0 || navigator.userAgent.indexOf('Android') > 0) {
-            // スマホ用のページにリダイレクトする
             return true;
         }
         return false;
@@ -111,6 +110,8 @@
         var frame = 0;
         var isReverse = false;
         var video = document.querySelector("#touchrange")
+        var canvas = div.querySelector("canvas");
+
         var seekflg=0
         var time=0
         var video_width = div.getBoundingClientRect().width;
@@ -118,44 +119,55 @@
         var duration = 100 //100fps
         var dragging = false; //ドラッグなう
 
+        var move_x = 0;
         /*event*/
-        div.addEventListener(setObj[device].start, function(ev) {
+        canvas.addEventListener(setObj[device].start, function(ev) {
             if(device == "pc") {
                 ev.dataTransfer.setDragImage(clearImg, 0, 0);
+                move_x = ev.clientX;
+            }else{
+                move_x = ev.changedTouches[0].clientX;
             }
+
         }, false);
-        div.addEventListener(setObj[device].end, function(ev) {
+        canvas.addEventListener(setObj[device].end, function(ev) {
             if(device == "pc") {
                 ev.dataTransfer.setDragImage(clearImg, 0, 0);
             }
             dragging = false;
+            //move_x = 0;
         }, false);
 
-        div.addEventListener(setObj[device].drag, function(ev) {
+        canvas.addEventListener(setObj[device].drag, function(ev) {
             if(device == "pc") {
                 ev.dataTransfer.setDragImage(clearImg, 0, 0);
                 x = ev.clientX;
+                //move_x = ev.clientX;
             }else{
                 x = ev.changedTouches[0].clientX;
+                //move_x = ev.changedTouches[0].clientX;
             }
             dragging = true;
-            console.log(x)
+            //console.log(x)
             //ダメパターン
             if(video_x > x || (video_x+video_width) < x){ console.log("範囲外");return};
             //console.log("dragging : ", ev.clientX)
-            width_radio = (x - video_x) / video_width
+            //左恥からの移動距離
+            //width_radio = (x - video_x) / video_width
+            console.log("aaaaaaaaaaa:", [x,move_x,video_x])
+            width_radio = ((move_x-x)*3) / video_width
             console.log("width_radio",width_radio)
             _time = duration * (width_radio)
-            console.log("_time:", _time)
-            target_time = Math.floor(_time)
+            //console.log("_time:", _time)
+            target_time = (Math.floor(_time) * -1)+frame
+            console.log(target_time)
             if(target_time == time) {console.log("same");return;}
             time = target_time
             changeImage(time)
             autoCount = time
-            console.log("target:", time)
+            //console.log("target:", time)
         }, false);
 
-        var canvas = div.querySelector("canvas");
         if ( ! canvas || ! canvas.getContext ) { console.log("a?");return false; }
         var ctx = canvas.getContext('2d');
         var img = new Image();
@@ -176,17 +188,12 @@
                     if(dragging){
                         return
                     }
+                    console.log("frame :", [frame,isReverse])
                     /*順再生で終わりまできたら逆再生ON*/
                     if(autoCount >= 100){
-                        isReverse = ! isReverse;
                         autoCount = 0;
                     }
-                    /*逆順なら100frameの*/
-                    if(isReverse){
-                        frame = Math.abs(autoCount - 100)
-                    }else{
-                        frame = autoCount
-                    }
+                    frame = autoCount
                     changeImage(frame)　//idをclearIntervalで指定している
                     autoCount ++;
                     //console.log(autoCount);
