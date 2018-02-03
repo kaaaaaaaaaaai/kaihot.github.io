@@ -67,21 +67,34 @@
     }
     var clearImg = document.createElement("img");
     clearImg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII=";
-
+    var setObj = {
+        "sp":{
+            start:"touchstart",
+            drag:"touchmove",
+            end:"touchend"
+        },
+        "pc":{
+            start:"dragstart",
+            drag:"drag",
+            end:"dragend"
+        }
+    };
     (function(){
         var divs = document.querySelectorAll(".touchrange");
         divs.forEach(function(div){
             console.log(div)
             if(isSP()){
-                //new swipe(div);
+                new swipe(div, "sp");
             }else{
-                new swipe(div);
+                new swipe(div, "pc");
             }
         });
-
     })();
-    function swipe(div){
+
+    function swipe(div, device){
         var autoCount= 0;
+        var frame = 0;
+        var isReverse = false;
         var video = document.querySelector("#touchrange")
         var seekflg=0
         var time=0
@@ -91,19 +104,26 @@
         var dragging = false; //ドラッグなう
 
         /*event*/
-        div.addEventListener("dragstart", function(ev) {
-            ev.dataTransfer.setDragImage(clearImg, 0, 0);
+        div.addEventListener(setObj[device].start, function(ev) {
+            if(device == "pc") {
+                ev.dataTransfer.setDragImage(clearImg, 0, 0);
+            }
         }, false);
-        div.addEventListener("dragend", function(ev) {
-            ev.dataTransfer.setDragImage(clearImg, 0, 0);
+        div.addEventListener(setObj[device].end, function(ev) {
+            if(device == "pc") {
+                ev.dataTransfer.setDragImage(clearImg, 0, 0);
+            }
             dragging = false;
         }, false);
 
-        div.addEventListener("drag", function(ev) {
-            ev.dataTransfer.setDragImage(clearImg, 0, 0);
-
+        div.addEventListener(setObj[device].drag, function(ev) {
+            if(device == "pc") {
+                ev.dataTransfer.setDragImage(clearImg, 0, 0);
+                x = ev.clientX;
+            }else{
+                x = ev.changedTouches[0].clientX;
+            }
             dragging = true;
-            x = ev.clientX;
             console.log(x)
             //ダメパターン
             if(video_x > x || (video_x+video_width) < x){ console.log("範囲外");return};
@@ -138,13 +158,26 @@
             img.onload = function() {
                 ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
                 setInterval(function(){
+                    /*ドラッグ中は自動再生OFF*/
                     if(dragging){
                         return
                     }
+                    /*逆再生ONで最初まで戻ったら正常再生に戻す*/
+                    if(isReverse && autoCount == 0){
+                        isReverse = false;
+                    }
+                    /*順再生で終わりまできたら逆再生ON*/
                     if(autoCount >= 100){
+                        isReverse = true;
                         autoCount = 0;
                     }
-                    changeImage(autoCount)　//idをclearIntervalで指定している
+                    /*逆順なら100frameの*/
+                    if(isReverse){
+                        frame = Math.abs(autoCount - 100)
+                    }else{
+                        frame = autoCount
+                    }
+                    changeImage(frame)　//idをclearIntervalで指定している
                     autoCount ++;
                 }, 50);
             }
