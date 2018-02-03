@@ -26,46 +26,46 @@
                 </div>
         </div>
     </div>
-    <!--<div class="row">-->
-        <!--<div class="col-md-12">-->
-            <!--<div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">-->
-                <!--<canvas class="canvas" data-src="./img07.png">-->
-                <!--</canvas>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="row">-->
-        <!--<div class="col-md-12">-->
-            <!--<div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">-->
-                <!--<canvas class="canvas" data-src="./img02.png">-->
-                <!--</canvas>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="row">-->
-        <!--<div class="col-md-12">-->
-            <!--<div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">-->
-                <!--<canvas class="canvas" data-src="./img03.png">-->
-                <!--</canvas>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="row">-->
-        <!--<div class="col-md-12">-->
-            <!--<div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">-->
-                <!--<canvas class="canvas" data-src="./img06.png">-->
-                <!--</canvas>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="row">-->
-        <!--<div class="col-md-12">-->
-            <!--<div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">-->
-                <!--<canvas class="canvas" data-src="./img08.png">-->
-                <!--</canvas>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+                <canvas class="canvas" data-src="./img07.png">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+                <canvas class="canvas" data-src="./img02.png">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+                <canvas class="canvas" data-src="./img03.png">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+                <canvas class="canvas" data-src="./img06.png">
+                </canvas>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+                <canvas class="canvas" data-src="./img08.png">
+                </canvas>
+            </div>
+        </div>
+    </div>
 
 </div>
 
@@ -154,13 +154,13 @@
             //console.log("dragging : ", ev.clientX)
             //左恥からの移動距離
             //width_radio = (x - video_x) / video_width
-            console.log("aaaaaaaaaaa:", [x,move_x,video_x])
+            //console.log("aaaaaaaaaaa:", [x,move_x,video_x])
             width_radio = ((move_x-x)*3) / video_width
-            console.log("width_radio",width_radio)
+            //console.log("width_radio",width_radio)
             _time = duration * (width_radio)
             //console.log("_time:", _time)
             target_time = (Math.floor(_time) * -1)+frame
-            console.log(target_time)
+            //console.log(target_time)
             if(target_time == time) {console.log("same");return;}
             time = target_time
             changeImage(time)
@@ -188,7 +188,7 @@
                     if(dragging){
                         return
                     }
-                    console.log("frame :", [frame,isReverse])
+                    //console.log("frame :", [frame,isReverse])
                     /*順再生で終わりまできたら逆再生ON*/
                     if(autoCount >= 100){
                         autoCount = 0;
