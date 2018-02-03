@@ -8,8 +8,8 @@
     <style>
         canvas {
             background-color: blue;
-            width: 100%;
-            height: auto;
+            width: 400px;
+            height: 225px;
         }
     </style>
 </head>
@@ -19,44 +19,54 @@
         ドラッグで逆再生
     </div>
     <div class="row">
-        <div class="col p-2">
-                <div class="touchrange" draggable="true" style="width: 320px">
+        <div class="col-md-12">
+                <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
                     <canvas class="canvas" data-src="https://dotup.org/uploda/dotup.org1453944.png">
                     </canvas>
                 </div>
         </div>
-        <div class="col p-2">
-            <div class="touchrange" draggable="true" style="width: 320px">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
                 <canvas class="canvas" data-src="./img07.png">
                 </canvas>
             </div>
         </div>
-        <div class="col p-2">
-            <div class="touchrange" draggable="true" style="width: 320px">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
                 <canvas class="canvas" data-src="./img02.png">
                 </canvas>
             </div>
         </div>
-        <div class="col p-2">
-            <div class="touchrange" draggable="true" style="width: 320px">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
                 <canvas class="canvas" data-src="./img03.png">
                 </canvas>
             </div>
         </div>
-        <div class="col p-2">
-            <div class="touchrange" draggable="true" style="width: 320px">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
                 <canvas class="canvas" data-src="./img06.png">
                 </canvas>
             </div>
         </div>
-        <div class="col p-2">
-            <div class="touchrange" draggable="true" style="width: 320px">
-                <canvas class="canvas" data-src="./img05.png">
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+                <canvas class="canvas" data-src="./img08.png">
                 </canvas>
             </div>
         </div>
-
     </div>
+    <canvas id="test"></canvas>
 
 </div>
 
@@ -151,7 +161,6 @@
         var ctx = canvas.getContext('2d');
         var img = new Image();
         img.src = canvas.getAttribute("data-src")
-        img.className = "img-fluid"
         changeImage(0);
         canvas.appendChild(img)
         function changeImage(t){
@@ -159,7 +168,7 @@
             var nextYSlot = Math.floor((t+1)/10);
             var nextFrameOffsetX = nextXSlot * 320;
             var nextFrameOffsetY = nextYSlot * 180;
-            console.log ("SLOT FOR THIS FRAME IS: " + nextXSlot + " " + nextYSlot);
+            //console.log ("SLOT FOR THIS FRAME IS: " + nextXSlot + " " + nextYSlot);
 
             img.onload = function() {
                 ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
@@ -181,10 +190,10 @@
                     }
                     changeImage(frame)　//idをclearIntervalで指定している
                     autoCount ++;
-                    console.log(autoCount);
+                    //console.log(autoCount);
                 }, 50);
             }
-            ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
+            ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 210, 0, 0, 320, 180);
         }
 
     }
