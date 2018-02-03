@@ -1,18 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Title</title>
+    <style>
+        canvas {
+            background-color: blue;
+            width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-ドラッグしてｗ
-<div id="touchrange" draggable="true" style="width:320px;height:160px">
-    <canvas id="c1">
+<div class="container">
+    <div class="alert alert-success" role="alert">
+        ドラッグで逆再生
+    </div>
+    <div class="row">
+        <div class="col p-2">
+                <div class="touchrange" draggable="true" style="width: 320px">
+                    <canvas class="canvas" data-src="https://dotup.org/uploda/dotup.org1453944.png">
+                    </canvas>
+                </div>
+        </div>
+        <div class="col p-2">
+            <div class="touchrange" draggable="true" style="width: 320px">
+                <canvas class="canvas" data-src="./img02.png">
+                </canvas>
+            </div>
+        </div>
+        <div class="col p-2">
+            <div class="touchrange" draggable="true" style="width: 320px">
+                <canvas class="canvas" data-src="./img03.png">
+                </canvas>
+            </div>
+        </div>
+        <div class="col p-2">
+            <div class="touchrange" draggable="true" style="width: 320px">
+                <canvas class="canvas" data-src="./img04.png">
+                </canvas>
+            </div>
+        </div>
+        <div class="col p-2">
+            <div class="touchrange" draggable="true" style="width: 320px">
+                <canvas class="canvas" data-src="./img05.png">
+                </canvas>
+            </div>
+        </div>
 
-    </canvas>
+    </div>
+
 </div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 <script>
+    var isSP = function(){
+        if ((navigator.userAgent.indexOf('iPhone') > 0 && navigator.userAgent.indexOf('iPad') == -1) || navigator.userAgent.indexOf('iPod') > 0 || navigator.userAgent.indexOf('Android') > 0) {
+            // スマホ用のページにリダイレクトする
+            return true;
+        }
+        return false;
+    }
+    var clearImg = document.createElement("img");
+    clearImg.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVQI12NgYAAAAAMAASDVlMcAAAAASUVORK5CYII=";
+
+    (function(){
+        var divs = document.querySelectorAll(".touchrange");
+        divs.forEach(function(div){
+            console.log(div)
+            if(isSP()){
+                //new swipe(div);
+            }else{
+                new swipe(div);
+            }
+        });
+
+    })();
+    function swipe(div){
+        var autoCount= 0;
+        var video = document.querySelector("#touchrange")
+        var seekflg=0
+        var time=0
+        var video_width = div.getBoundingClientRect().width;
+        var video_x = div.getBoundingClientRect().x;
+        var duration = 100 //100fps
+        var dragging = false; //ドラッグなう
+
+        /*event*/
+        div.addEventListener("dragstart", function(ev) {
+            ev.dataTransfer.setDragImage(clearImg, 0, 0);
+        }, false);
+        div.addEventListener("dragend", function(ev) {
+            ev.dataTransfer.setDragImage(clearImg, 0, 0);
+            dragging = false;
+        }, false);
+
+        div.addEventListener("drag", function(ev) {
+            ev.dataTransfer.setDragImage(clearImg, 0, 0);
+
+            dragging = true;
+            x = ev.clientX;
+            console.log(x)
+            //ダメパターン
+            if(video_x > x || (video_x+video_width) < x){ console.log("範囲外");return};
+            //console.log("dragging : ", ev.clientX)
+            width_radio = (x - video_x) / video_width
+            console.log("width_radio",width_radio)
+            _time = duration * (width_radio)
+            console.log("_time:", _time)
+            target_time = Math.floor(_time)
+            if(target_time == time) {console.log("same");return;}
+            time = target_time
+            changeImage(time)
+            autoCount = time
+            console.log("target:", time)
+        }, false);
+
+        var canvas = div.querySelector("canvas");
+        if ( ! canvas || ! canvas.getContext ) { console.log("a?");return false; }
+        var ctx = canvas.getContext('2d');
+        var img = new Image();
+        img.src = canvas.getAttribute("data-src")
+        img.className = "img-fluid"
+        changeImage(0);
+        canvas.appendChild(img)
+        function changeImage(t){
+            var nextXSlot = (t+1) % 10;
+            var nextYSlot = Math.floor((t+1)/10);
+            var nextFrameOffsetX = nextXSlot * 320;
+            var nextFrameOffsetY = nextYSlot * 180;
+            console.log ("SLOT FOR THIS FRAME IS: " + nextXSlot + " " + nextYSlot);
+
+            img.onload = function() {
+                ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
+                setInterval(function(){
+                    if(dragging){
+                        return
+                    }
+                    if(autoCount >= 100){
+                        autoCount = 0;
+                    }
+                    changeImage(autoCount)　//idをclearIntervalで指定している
+                    autoCount ++;
+                }, 50);
+            }
+            ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
+        }
+
+    }
+    /*
     (function(){
         autoCount= 0;
         video = document.querySelector("#touchrange")
@@ -81,11 +221,10 @@
         var canvas = document.getElementById('c1');
         if ( ! canvas || ! canvas.getContext ) { console.log("a?");return false; }
         var ctx = canvas.getContext('2d');
-        /* Imageオブジェクトを生成 */
         var img = new Image();
         img.src = "https://dotup.org/uploda/dotup.org1453944.png";
+        img.className = "img-fluid"
         changeImage(0);
-        /* 画像が読み込まれるのを待ってから処理を続行 */
         canvas.appendChild(img)
         function changeImage(t){
             var nextXSlot = (t+1) % 10;
@@ -110,7 +249,7 @@
             ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
         }
     })();
-
+*/
 
 
 </script>
