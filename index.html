@@ -162,13 +162,9 @@
                     if(dragging){
                         return
                     }
-                    /*逆再生ONで最初まで戻ったら正常再生に戻す*/
-                    if(isReverse && autoCount == 0){
-                        isReverse = false;
-                    }
                     /*順再生で終わりまできたら逆再生ON*/
                     if(autoCount >= 100){
-                        isReverse = true;
+                        isReverse = ! isReverse;
                         autoCount = 0;
                     }
                     /*逆順なら100frameの*/
@@ -179,6 +175,7 @@
                     }
                     changeImage(frame)　//idをclearIntervalで指定している
                     autoCount ++;
+                    console.log(autoCount);
                 }, 50);
             }
             ctx.drawImage(img, nextFrameOffsetX, nextFrameOffsetY, 320, 180,0,0,320,180);
