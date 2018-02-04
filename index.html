@@ -20,7 +20,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-                <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+                <div class="touchrange" draggable="true" style="max-width:320px;margin-left: auto;margin-right: auto;">
                     <canvas class="canvas" data-src="https://dotup.org/uploda/dotup.org1453944.png">
                     </canvas>
                 </div>
@@ -28,7 +28,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+            <div class="touchrange" draggable="true" style="max-width:320px;margin-left: auto;margin-right: auto;">
                 <canvas class="canvas" data-src="./img07.png">
                 </canvas>
             </div>
@@ -36,7 +36,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+            <div class="touchrange" draggable="true" style="max-width:320px;margin-left: auto;margin-right: auto;">
                 <canvas class="canvas" data-src="./img02.png">
                 </canvas>
             </div>
@@ -44,7 +44,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+            <div class="touchrange" draggable="true" style="max-width:320px;margin-left: auto;margin-right: auto;">
                 <canvas class="canvas" data-src="./img03.png">
                 </canvas>
             </div>
@@ -52,7 +52,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+            <div class="touchrange" draggable="true" style="max-width:320px;margin-left: auto;margin-right: auto;">
                 <canvas class="canvas" data-src="./img06.png">
                 </canvas>
             </div>
@@ -60,7 +60,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="touchrange" draggable="true" style="width: 320px;margin-left: auto;margin-right: auto;">
+            <div class="touchrange" draggable="true" style="max-width:320px;margin-left: auto;margin-right: auto;">
                 <canvas class="canvas" data-src="./img08.png">
                 </canvas>
             </div>
@@ -108,11 +108,7 @@
     function swipe(div, device){
         var autoCount= 0;
         var frame = 0;
-        var isReverse = false;
-        var video = document.querySelector("#touchrange")
         var canvas = div.querySelector("canvas");
-
-        var seekflg=0
         var time=0
         var video_width = div.getBoundingClientRect().width;
         var video_x = div.getBoundingClientRect().x;
@@ -120,8 +116,9 @@
         var dragging = false; //ドラッグなう
 
         var move_x = 0;
+
         /*event*/
-        canvas.addEventListener(setObj[device].start, function(ev) {
+        div.addEventListener(setObj[device].start, function(ev) {
             if(device == "pc") {
                 ev.dataTransfer.setDragImage(clearImg, 0, 0);
                 move_x = ev.clientX;
@@ -130,7 +127,7 @@
             }
 
         }, false);
-        canvas.addEventListener(setObj[device].end, function(ev) {
+        div.addEventListener(setObj[device].end, function(ev) {
             if(device == "pc") {
                 ev.dataTransfer.setDragImage(clearImg, 0, 0);
             }
@@ -138,7 +135,8 @@
             //move_x = 0;
         }, false);
 
-        canvas.addEventListener(setObj[device].drag, function(ev) {
+        div.addEventListener(setObj[device].drag, function(ev) {
+            console.log("vvvv")
             if(device == "pc") {
                 ev.dataTransfer.setDragImage(clearImg, 0, 0);
                 x = ev.clientX;
